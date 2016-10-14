@@ -841,7 +841,7 @@ uint8_t Adafruit_FONA::getGPS(uint8_t arg, char *buffer, uint8_t maxbuff) {
   return len;
 }
 
-boolean Adafruit_FONA::getGPS(float *lat, float *lon, float *speed_kph, float *heading, float *altitude) {
+boolean Adafruit_FONA::getGPS(float *lat, float *lon, float *altitude, float *speed_kph, float *heading, char *_date) {
 
   char gpsbuffer[120];
 
@@ -937,6 +937,7 @@ boolean Adafruit_FONA::getGPS(float *lat, float *lon, float *speed_kph, float *h
   } else if (_type == FONA808_V2) {
     // Parse 808 V2 response.  See table 2-3 from here for format:
     // http://www.adafruit.com/datasheets/SIM800%20Series_GNSS_Application%20Note%20V1.00.pdf
+    // +CGNSINF: 1,1,20161013161751.000,54.077098,22.927497,153.200,1.26,336.4,1,,1.8,3.1,2.5,,13,6,,,33,,
 
     // skip GPS run status
     char *tok = strtok(gpsbuffer, ",");
@@ -946,9 +947,11 @@ boolean Adafruit_FONA::getGPS(float *lat, float *lon, float *speed_kph, float *h
     tok = strtok(NULL, ",");
     if (! tok) return false;
 
-    // skip date
-    tok = strtok(NULL, ",");
-    if (! tok) return false;
+    // grab date
+    char *datep = strtok(NULL, ",");
+    if (! datep) return false;
+
+    strcpy(_date, (char *)(datep)); 
 
     // grab the latitude
     char *latp = strtok(NULL, ",");
