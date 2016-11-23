@@ -99,7 +99,7 @@ boolean Adafruit_FONA::begin(Stream &port) {
 
 
 
-  if (prog_char_strstr(replybuffer, (prog_char *)F("SIM808 R14")) != 0) {
+  if (prog_char_strstr(replybuffer, (prog_char *)F("SIM808 R14.18")) != 0) {
     _type = FONA808_V2;
   } else if (prog_char_strstr(replybuffer, (prog_char *)F("SIM808 R13")) != 0) {
     _type = FONA808_V1;
